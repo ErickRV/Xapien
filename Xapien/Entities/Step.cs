@@ -20,10 +20,9 @@ namespace Xapien.Entities
             this.Args = Args;
         }
 
-        //TODO? Run
-        //public Task Run(IProcessRunner processRunner) {
-        //    return processRunner.Run(this.Route, this.Command, this.Args);
-        //}
-
+        public Task<StepResult> Run(IProcessRunner procRunner)
+        {
+            return procRunner.RunProcess(this.Route, $"{this.Command} {this.Args}");
+        }
     }
 }

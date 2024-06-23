@@ -10,9 +10,6 @@ namespace Xapien.Tests.Core
     [TestClass]
     public class OrchestratorTests
     {
-        [TestMethod]
-        public void EstoSoloEsUnaPrueba() {
-            
-        }
+
     }
 }

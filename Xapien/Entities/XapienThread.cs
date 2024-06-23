@@ -10,7 +10,7 @@ namespace Xapien.Entities
     {
         public Task XTask { get; private set; }
         public string Name { get; private set; }
-        public List<Step> Steps { get; private set; }
+        public List<Step> Steps { get; private set; } 
 
         //TODO:
         // MultiThreaded = false
@@ -23,6 +23,7 @@ namespace Xapien.Entities
             Steps = new List<Step>();
         }
 
+        //NOTE: List insertion order is guaranteed if no items are moved in the future 
         public void AddStep(Step step)
         {
             this.Steps.Add(step);

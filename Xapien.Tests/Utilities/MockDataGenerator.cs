@@ -13,5 +13,9 @@ namespace Xapien.Tests.Utilities
         public static Step CreateMockStep() {
             return AutoFaker.Generate<Step>();
         }
+
+        public static StepResult CreateMockStepResult() {
+            return AutoFaker.Generate<StepResult>();
+        }
     }
 }

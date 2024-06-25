@@ -172,6 +172,75 @@ namespace Xapien.Tests.Entities
             //Act
             await xapienThread.NextStep();
         }
+
+        [TestMethod]
+        public async Task InitThread_Ok() {
+            //Arrange
+            int stepsToRun = 5;
+            XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
+
+            Mock<IProcessRunner> mockProcRunner = new Mock<IProcessRunner>();
+            int stepCounter = 0;
+
+            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationToken token = source.Token;
+
+            Step step0 = MockDataGenerator.CreateMockStep();
+            xapienThread.AddStep(step0);
+            Step step1 = MockDataGenerator.CreateMockStep();
+            xapienThread.AddStep(step1);
+            Step step2 = MockDataGenerator.CreateMockStep();
+            xapienThread.AddStep(step2);
+
+            mockProcRunner.Setup(procRunner => procRunner.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.Run(async () => 
+                {
+                    await Task.Delay(10);
+                    return MockDataGenerator.CreateMockStepResult();
+                }))
+                .Callback(() => { 
+                    stepCounter++;
+                    if (stepCounter == stepsToRun)
+                        source.Cancel();
+                });
+
+            xapienThread.SetProcessRunner(mockProcRunner.Object);
+
+            //Act
+            int mainThreadCounter = 0;
+            Task xTask = xapienThread.InitThread(token);
+            while (!xTask.IsCompleted) {
+                mainThreadCounter++;
+            }
+
+            //Assert
+            Assert.IsTrue(mainThreadCounter > 0);
+            mockProcRunner.Verify(procRunner => procRunner.RunProcess(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(stepsToRun));
+
+        }
+
+        [TestMethod]
+        public async Task InitThread_ExceptionIsThrown()
+        {
+            //Arrange 
+            XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
+
+            Step step0 = MockDataGenerator.CreateMockStep();
+            xapienThread.AddStep(step0);
+
+            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationToken token = source.Token;
+
+            //Act 
+            int mainThreadCounter = 0;
+            Task xTask = xapienThread.InitThread(token);
+            while (!xTask.IsCompleted){
+                mainThreadCounter++;
+            }
+
+            //Assert
+            Assert.IsTrue(xTask.Status == TaskStatus.Faulted);
+        }
     }
 }
 

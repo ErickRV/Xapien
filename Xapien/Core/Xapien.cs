@@ -13,6 +13,7 @@ namespace Xapien.Core
             CancellationToken token = source.Token;
 
             cancelationToken = token;
+            
 
         }
     }

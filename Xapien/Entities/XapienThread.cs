@@ -52,14 +52,16 @@ namespace Xapien.Entities
             return result;
         }
 
-        //TODO:
-        //public Task InitThread(CancellationToken token) {
-        //    XTask = Task.Run(async () => {
-        //        while (!token.IsCancellationRequested) {
-        //            await NextStep();
-        //        }
-        //    });
-        //    return XTask;
-        //}
+        public Task InitThread(CancellationToken token) {
+            XTask = Task.Run(async () =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    await NextStep();
+                }
+            });
+
+            return XTask;
+        }
     }
 }

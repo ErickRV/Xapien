@@ -20,6 +20,7 @@ namespace Xapien.Entities
         //TODO: Esto podria ser una clase diferente con la misma interface...
         // MultiThreaded = false
         // MaxThreadCount = 1
+        //Considerar poder ingresar una XapienThread como Step...
 
 
         public XapienThread(string name)

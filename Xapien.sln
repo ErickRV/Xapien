@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xapien", "Xapien\Xapien.csproj", "{8118AD9C-49BD-45A0-80F6-403235A92FBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien", "Xapien\Xapien.csproj", "{8118AD9C-49BD-45A0-80F6-403235A92FBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xapien.Tests", "Xapien.Tests\Xapien.Tests.csproj", "{1CFB27BE-8D0A-4937-84C0-DD8C848418AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien.Tests", "Xapien.Tests\Xapien.Tests.csproj", "{1CFB27BE-8D0A-4937-84C0-DD8C848418AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{B2D1DB8F-EAED-4FB9-B08D-B7D7FD556322}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basic", "Basic", "{198B435E-B8DA-4C44-8AF8-C373B1DF6858}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xapien.Example.Basic", "Examples\Basic\Xapien.Example.Basic\Xapien.Example.Basic.csproj", "{4C1ADF7A-C2B6-48E3-BD9C-BF33A1BE4279}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{63889FBA-8ED2-422D-A110-4DEAB5A906BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.FileWriter", "Examples\Basic\Modules\Example.FileWriter\Example.FileWriter.csproj", "{69646ECC-5E92-4047-A64C-E3844E31502A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +31,23 @@ Global
 		{1CFB27BE-8D0A-4937-84C0-DD8C848418AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CFB27BE-8D0A-4937-84C0-DD8C848418AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CFB27BE-8D0A-4937-84C0-DD8C848418AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C1ADF7A-C2B6-48E3-BD9C-BF33A1BE4279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C1ADF7A-C2B6-48E3-BD9C-BF33A1BE4279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C1ADF7A-C2B6-48E3-BD9C-BF33A1BE4279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C1ADF7A-C2B6-48E3-BD9C-BF33A1BE4279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69646ECC-5E92-4047-A64C-E3844E31502A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69646ECC-5E92-4047-A64C-E3844E31502A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69646ECC-5E92-4047-A64C-E3844E31502A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69646ECC-5E92-4047-A64C-E3844E31502A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{198B435E-B8DA-4C44-8AF8-C373B1DF6858} = {B2D1DB8F-EAED-4FB9-B08D-B7D7FD556322}
+		{4C1ADF7A-C2B6-48E3-BD9C-BF33A1BE4279} = {198B435E-B8DA-4C44-8AF8-C373B1DF6858}
+		{63889FBA-8ED2-422D-A110-4DEAB5A906BD} = {198B435E-B8DA-4C44-8AF8-C373B1DF6858}
+		{69646ECC-5E92-4047-A64C-E3844E31502A} = {63889FBA-8ED2-422D-A110-4DEAB5A906BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F3D6E254-6EF5-4B06-BBDB-96528B607DBD}

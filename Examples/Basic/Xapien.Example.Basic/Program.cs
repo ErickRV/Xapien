@@ -29,26 +29,6 @@ namespace Xapien.Example.Basic
                     ""),
                 });
 
-            builder.AddXThread("Hilo 2",
-                new List<Step>
-                {
-                    new Step("C:\\Xapien Show\\Programs\\FileManager\\Example.FileWriter.exe",
-                    "WriteFile -Path \"C:\\Xapien Show\\YThread\\\\\" -Name \"Hola\"",
-                    ""),
-
-                    new Step("C:\\Xapien Show\\Programs\\FileManager\\Example.FileWriter.exe",
-                    "WriteFile -Path \"C:\\Xapien Show\\YThread\\\\\" -Name \"Mundo\"",
-                    ""),
-
-                    new Step("C:\\Xapien Show\\Programs\\FileManager\\Example.FileWriter.exe",
-                    "KillFile -Path \"C:\\Xapien Show\\YThread\\Hola.txt\"",
-                    ""),
-
-                    new Step("C:\\Xapien Show\\Programs\\FileManager\\Example.FileWriter.exe",
-                    "KillFile -Path \"C:\\Xapien Show\\YThread\\Mundo.txt\"",
-                    ""),
-                });
-
             Xapien.Core.Xapien xapien = builder.Build();
             await xapien.Run();
         }

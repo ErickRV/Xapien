@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Example.FileWriter": {
-      "commandName": "Project",
-      "commandLineArgs": "WriteFile -Path \"C:\\Users\\Z3LT1K09\\Documents\\Xapien Show\\XThread1\\\" -Name \"Hola\" -content \"\""
-    }
-  }
-}

@@ -32,22 +32,6 @@ namespace Xapien.Tests.Entities
         }
 
         [TestMethod]
-        public void SetProcessRunner_Ok() {
-            //Arrange 
-            XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
-
-            Mock<IProcessRunner> mockProcRunner = new Mock<IProcessRunner>();
-            IProcessRunner processRunner = mockProcRunner.Object;
-
-            //Act
-            xapienThread.SetProcessRunner(processRunner);
-
-            //Assert
-            Assert.AreSame(processRunner, xapienThread.procRunner);
-
-        }
-
-        [TestMethod]
         public void AddStep() {
             //Arrange
             XapienThread xapienThread = new XapienThread("INSERTS");
@@ -56,16 +40,14 @@ namespace Xapien.Tests.Entities
             string Command = faker.Random.String(8);
             string Args = faker.Random.String(8);
 
-            Step step1 = new Step(Route, Command, Args);
+            IStep step1 = MockDataGenerator.CreateMockStep();
 
             //Act
             xapienThread.AddStep(step1);
 
             //Assert
             Assert.IsTrue(xapienThread.Steps.Count == 1);
-            Assert.AreEqual(xapienThread.Steps.First().Route, step1.Route);
-            Assert.AreEqual(xapienThread.Steps.First().Command, step1.Command);
-            Assert.AreEqual(xapienThread.Steps.First().Args, step1.Args);
+            Assert.AreEqual(xapienThread.Steps.First(), step1);
         }
 
         [TestMethod]
@@ -73,17 +55,15 @@ namespace Xapien.Tests.Entities
             //Arrange
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
 
-            Mock<IProcessRunner> mockProcRunner = new Mock<IProcessRunner>();
             StepResult stepResult = MockDataGenerator.CreateMockStepResult();
 
-            mockProcRunner.Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+            IStep step0 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker0);
+            mocker0.Setup(r => r.Run(It.IsAny<ResultBag>()))
                 .Returns(Task.FromResult(stepResult));
-            xapienThread.SetProcessRunner(mockProcRunner.Object);
-
-            Step step0 = MockDataGenerator.CreateMockStep();
+            
             xapienThread.AddStep(step0);
 
-            Step step1 = MockDataGenerator.CreateMockStep();
+            IStep step1 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker1);
             xapienThread.AddStep(step1);
 
             //Act
@@ -93,8 +73,8 @@ namespace Xapien.Tests.Entities
             Assert.AreEqual(1, xapienThread.currentStep);
             Assert.IsTrue(TestUtils.AreObjectsEqual(stepResult, result));
 
-            mockProcRunner.Verify(x => x.RunProcess(step0.Route, $"{step0.Command} {step0.Args}"), Times.Once);
-            mockProcRunner.Verify(x => x.RunProcess(step1.Route, $"{step1.Command} {step1.Args}"), Times.Never);
+            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
+            mocker1.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Never);
         }
 
         [TestMethod]
@@ -102,22 +82,19 @@ namespace Xapien.Tests.Entities
             //Arrange
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
 
-            Mock<IProcessRunner> mockProcRunner = new Mock<IProcessRunner>();
             StepResult step1Result = MockDataGenerator.CreateMockStepResult();
 
-            Step step0 = MockDataGenerator.CreateMockStep();
+            IStep step0 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker0);
             xapienThread.AddStep(step0);
 
-            Step step1 = MockDataGenerator.CreateMockStep();
+            IStep step1 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker1);
             xapienThread.AddStep(step1);
 
-            mockProcRunner.Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+            mocker0.Setup(x => x.Run(It.IsAny<ResultBag>()))
                 .Returns(Task.FromResult(MockDataGenerator.CreateMockStepResult()));
 
-            mockProcRunner.Setup(x => x.RunProcess(step1.Route, $"{step1.Command} {step1.Args}"))
+            mocker1.Setup(x => x.Run(It.IsAny<ResultBag>()))
                 .Returns(Task.FromResult(step1Result));
-
-            xapienThread.SetProcessRunner(mockProcRunner.Object);
 
             //Act
             await xapienThread.NextStep();
@@ -127,8 +104,8 @@ namespace Xapien.Tests.Entities
             Assert.AreEqual(0, xapienThread.currentStep);
             Assert.IsTrue(TestUtils.AreObjectsEqual(step1Result, result));
 
-            mockProcRunner.Verify(x => x.RunProcess(step0.Route, $"{step0.Command} {step0.Args}"), Times.Once);
-            mockProcRunner.Verify(x => x.RunProcess(step1.Route, $"{step1.Command} {step1.Args}"), Times.Once);
+            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
+            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
         }
 
         [TestMethod]
@@ -136,18 +113,11 @@ namespace Xapien.Tests.Entities
             //Arrange
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
 
-            Mock<IProcessRunner> mockProcRunner = new Mock<IProcessRunner>();
-
-            Step step0 = MockDataGenerator.CreateMockStep();
+            IStep step0 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker0);
             xapienThread.AddStep(step0);
 
-            Step step1 = MockDataGenerator.CreateMockStep();
+            IStep step1 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker1);
             xapienThread.AddStep(step1);
-
-            mockProcRunner.Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(MockDataGenerator.CreateMockStepResult()));
-
-            xapienThread.SetProcessRunner(mockProcRunner.Object);
 
             //Act
             await xapienThread.NextStep();
@@ -156,21 +126,8 @@ namespace Xapien.Tests.Entities
 
             //Assert
             Assert.AreEqual(1, xapienThread.currentStep);
-            mockProcRunner.Verify(x => x.RunProcess(step0.Route, $"{step0.Command} {step0.Args}"), Times.Exactly(2));
-            mockProcRunner.Verify(x => x.RunProcess(step1.Route, $"{step1.Command} {step1.Args}"), Times.Once);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public async Task NextStep_Error_NoProcRunner() {
-            //Arrange
-            XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
-
-            Step step0 = MockDataGenerator.CreateMockStep();
-            xapienThread.AddStep(step0);
-
-            //Act
-            await xapienThread.NextStep();
+            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Exactly(2));
+            mocker1.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
         }
 
         [TestMethod]
@@ -179,20 +136,17 @@ namespace Xapien.Tests.Entities
             int stepsToRun = 5;
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
 
-            Mock<IProcessRunner> mockProcRunner = new Mock<IProcessRunner>();
             int stepCounter = 0;
 
             CancellationTokenSource source = new CancellationTokenSource();
             CancellationToken token = source.Token;
 
-            Step step0 = MockDataGenerator.CreateMockStep();
-            xapienThread.AddStep(step0);
-            Step step1 = MockDataGenerator.CreateMockStep();
-            xapienThread.AddStep(step1);
-            Step step2 = MockDataGenerator.CreateMockStep();
-            xapienThread.AddStep(step2);
+            IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
+            xapienThread.AddStep(step);
+            xapienThread.AddStep(step);
+            xapienThread.AddStep(step);
 
-            mockProcRunner.Setup(procRunner => procRunner.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+            mocker.Setup(r => r.Run(It.IsAny<ResultBag>()))
                 .Returns(Task.Run(async () => 
                 {
                     await Task.Delay(10);
@@ -204,8 +158,6 @@ namespace Xapien.Tests.Entities
                         source.Cancel();
                 });
 
-            xapienThread.SetProcessRunner(mockProcRunner.Object);
-
             //Act
             int mainThreadCounter = 0;
             Task xTask = xapienThread.InitThread(token);
@@ -215,7 +167,7 @@ namespace Xapien.Tests.Entities
 
             //Assert
             Assert.IsTrue(mainThreadCounter > 0);
-            mockProcRunner.Verify(procRunner => procRunner.RunProcess(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(stepsToRun));
+            mocker.Verify(r => r.Run(It.IsAny<ResultBag>()), Times.Exactly(stepsToRun));
 
         }
 
@@ -225,7 +177,10 @@ namespace Xapien.Tests.Entities
             //Arrange 
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
 
-            Step step0 = MockDataGenerator.CreateMockStep();
+            IStep step0 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
+            mocker.Setup(m => m.Run(It.IsAny<ResultBag>()))
+                .Throws(new Exception());
+
             xapienThread.AddStep(step0);
 
             CancellationTokenSource source = new CancellationTokenSource();

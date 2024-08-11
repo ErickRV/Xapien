@@ -1,5 +1,6 @@
 ﻿using AutoBogus;
 using Bogus;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,23 +13,45 @@ namespace Xapien.Tests.Utilities
 {
     internal class MockDataGenerator
     {
-        public static Step CreateMockStep() {
-            return AutoFaker.Generate<Step>();
+        public static IStep CreateMockStep() {
+            Mock<IStep> mock = new Mock<IStep>();
+            mock.Setup(x => x.Run(It.IsAny<ResultBag>()));
+            return mock.Object;
+        }
+
+        public static IStep CreateMockStep(out Mock<IStep> mocker)
+        {
+            Mock<IStep> mock = new Mock<IStep>();
+            mock.Setup(x => x.Run(It.IsAny<ResultBag>()));
+
+            mocker = mock;
+            return mock.Object;
+        }
+
+        public static MockStep CreateMockStepImplementation() {
+            return new MockStep();
         }
 
         public static StepResult CreateMockStepResult() {
             return AutoFaker.Generate<StepResult>();
         }
 
-        public static XapienThread CreateMockXapienThread(IProcessRunner ProcRunner, int StepCount){
+        public static XapienThread CreateMockXapienThread(IStep step, int StepCount){
             Faker faker = new Faker();
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
-            xapienThread.SetProcessRunner(ProcRunner);
             for (int i = 0; i < StepCount; i++) {
-                xapienThread.AddStep((CreateMockStep()));
+                xapienThread.AddStep(step);
             }
 
             return xapienThread;
+        }
+    }
+
+    internal class MockStep : IStep
+    {
+        public Task<StepResult> Run(ResultBag bag)
+        {
+            return Task.FromResult(new AutoFaker<StepResult>().Generate());
         }
     }
 }

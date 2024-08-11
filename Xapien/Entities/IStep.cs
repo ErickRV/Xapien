@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xapien.Services.Interfaces;
 
 namespace Xapien.Entities
 {
-    public class StepResult
+    public interface IStep
     {
-        public int ExitCode { get; set; }
-        public object Output { get; set; }
+        public Task<StepResult> Run(ResultBag bag);
     }
 }

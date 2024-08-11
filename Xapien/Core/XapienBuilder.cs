@@ -11,28 +11,20 @@ namespace Xapien.Core
 {
     public class XapienBuilder
     {
-        public IProcessRunner ProcessRunner { get; private set; }
         public List<XapienThread> XThreads { get; private set; }
 
         public XapienBuilder()
         {
-            this.ProcessRunner = new ProcessRunner();
             this.XThreads = new List<XapienThread>();
         }
 
-        public void AddXThread(string threadName, List<Step> steps)
+        public void AddXThread(string threadName, List<IStep> steps)
         {
             XapienThread xapienThread = new XapienThread(threadName);
             for (int i = 0; i < steps.Count; i++)
                 xapienThread.Steps.Add(steps[i]);
 
-            xapienThread.SetProcessRunner(this.ProcessRunner);
             XThreads.Add(xapienThread);
-        }
-
-        public void SetProcessRunner(IProcessRunner processRunner)
-        {
-            this.ProcessRunner = processRunner;
         }
 
         public Xapien Build()

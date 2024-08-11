@@ -9,11 +9,10 @@ namespace Xapien.Entities
 {
     public class XapienThread
     {
-        public IProcessRunner procRunner { get; private set; }
-
         public Task XTask { get; private set; }
         public string Name { get; private set; }
-        public List<Step> Steps { get; private set; }
+        public List<IStep> Steps { get; private set; }
+        public ResultBag ResultBag { get; private set; }
 
         public int currentStep { get; private set; }
 
@@ -27,24 +26,17 @@ namespace Xapien.Entities
         {
             this.Name = name;
             this.currentStep = 0;
-            Steps = new List<Step>();
+            Steps = new List<IStep>();
         }
 
         //NOTE: List insertion order is guaranteed if no items are moved in the future 
-        public void AddStep(Step step)
+        public void AddStep(IStep step)
         {
             this.Steps.Add(step);
         }
 
-        public void SetProcessRunner(IProcessRunner processRunner) {
-            this.procRunner = processRunner;
-        }
-
         public Task<StepResult> NextStep() {
-            if (procRunner == default)
-                throw new ArgumentNullException("ProcessRuner has not been set for this Thread!");
-
-            Task<StepResult> result = Steps[currentStep].Run(this.procRunner);
+            Task<StepResult> result = Steps[currentStep].Run(ResultBag);
             currentStep++;
 
             if (currentStep == Steps.Count)

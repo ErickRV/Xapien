@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Xapien.Entities
 {
-    public class StepResult
+    public class ResultBag
     {
-        public int ExitCode { get; set; }
-        public object Output { get; set; }
+        public Dictionary<string, StepResult> SetpResults { get; set; }
+
     }
 }

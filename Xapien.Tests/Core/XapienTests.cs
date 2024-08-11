@@ -22,13 +22,13 @@ namespace Xapien.Tests.Core
         [TestMethod]
         public void CreateXapien_Ok() {
             //Arrange 
-            Mock<IProcessRunner> mockProcessRunner = new Mock<IProcessRunner>();
+            IStep step = MockDataGenerator.CreateMockStep();
 
             List<XapienThread> threads = new List<XapienThread>()
             {
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
             };
 
             //Act
@@ -41,13 +41,12 @@ namespace Xapien.Tests.Core
         [TestMethod]
         public void SetCancellationTokenSource_Ok() {
             //Arrange 
-            Mock<IProcessRunner> mockProcessRunner = new Mock<IProcessRunner>();
-
+            IStep step = MockDataGenerator.CreateMockStep();
             List<XapienThread> threads = new List<XapienThread>()
             {
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
             };
             CancellationTokenSource tokenSource = new CancellationTokenSource();
 
@@ -62,21 +61,22 @@ namespace Xapien.Tests.Core
         [TestMethod]
         public async Task Run_NoCancellationSourceSet_Ok() {
             //Arrange 
-            Mock<IProcessRunner> mockProcessRunner = new Mock<IProcessRunner>();
-            int processRunerExecCounter = 0;
-            mockProcessRunner.Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+            int runCounter = 0;
+
+            IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
+            mocker.Setup(m => m.Run(It.IsAny<ResultBag>()))
                 .Returns(Task.Run(async () => {
                     await Task.Delay(50);
                     return MockDataGenerator.CreateMockStepResult();
                 }))
-                .Callback(() => { 
-                    processRunerExecCounter++;
+                .Callback(() => {
+                    runCounter++;
                 });
 
             List<XapienThread> threads = new List<XapienThread>()
             {
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
             };
 
             //Act
@@ -87,7 +87,7 @@ namespace Xapien.Tests.Core
             //Assert
             Assert.IsNotNull(xapien.CancellationTokenSource);
             int randomSteps = _faker.Random.Int(5, 20);
-            while (processRunerExecCounter < randomSteps) {
+            while (runCounter < randomSteps) {
                 Assert.AreEqual(TaskStatus.Running, mainThread.Status);
                 Assert.IsTrue(xapien.threads.Select(t => t.XTask).All(x => x.Status == TaskStatus.Running));
             }
@@ -98,22 +98,22 @@ namespace Xapien.Tests.Core
         [TestMethod]
         public async Task Run_CancellationSourceSet_Ok() {
             //Arrange 
-            Mock<IProcessRunner> mockProcessRunner = new Mock<IProcessRunner>();
-            int processRunerExecCounter = 0;
-            mockProcessRunner.Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+            int runCounter = 0;
+            IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
+            mocker.Setup(m => m.Run(It.IsAny<ResultBag>()))
                 .Returns(Task.Run(async () => {
                     await Task.Delay(50);
                     return MockDataGenerator.CreateMockStepResult();
                 }))
                 .Callback(() => {
-                    processRunerExecCounter++;
+                    runCounter++;
                 });
 
             List<XapienThread> threads = new List<XapienThread>()
             {
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
             };
 
             CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -129,7 +129,7 @@ namespace Xapien.Tests.Core
             Assert.AreEqual(tokenSource, xapien.CancellationTokenSource);
 
             int randomSteps = _faker.Random.Int(5, 20);
-            while (processRunerExecCounter < randomSteps)
+            while (runCounter < randomSteps)
             {
                 Assert.AreEqual(TaskStatus.Running, mainThread.Status);
                 Assert.IsTrue(xapien.threads.Select(t => t.XTask).All(x => x.Status == TaskStatus.Running));
@@ -143,15 +143,15 @@ namespace Xapien.Tests.Core
             //Arrange 
             int randomSteps = _faker.Random.Int(5, 20);
 
-            Mock<IProcessRunner> mockProcessRunner = new Mock<IProcessRunner>();
+            IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
 
-            mockProcessRunner.Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>()))
+            mocker.Setup(x => x.Run(It.IsAny<ResultBag>()))
                 .Throws(new Exception());
 
             List<XapienThread> threads = new List<XapienThread>()
             {
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
-                MockDataGenerator.CreateMockXapienThread(mockProcessRunner.Object, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
+                MockDataGenerator.CreateMockXapienThread(step, _faker.Random.Int(1, 10)),
             };
 
             //Act

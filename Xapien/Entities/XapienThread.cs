@@ -27,6 +27,9 @@ namespace Xapien.Entities
             this.Name = name;
             this.currentStep = 0;
             Steps = new List<IStep>();
+
+            ResultBag = new ResultBag();
+            ResultBag.SetpResults = new Dictionary<string, StepResult>();
         }
 
         //NOTE: List insertion order is guaranteed if no items are moved in the future 

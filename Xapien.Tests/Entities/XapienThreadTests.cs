@@ -29,6 +29,8 @@ namespace Xapien.Tests.Entities
             Assert.AreEqual(name, xapienThread.Name);
             Assert.AreEqual(0, xapienThread.currentStep);
             Assert.IsTrue(xapienThread.Steps.Count() == 0);
+            Assert.IsNotNull(xapienThread.ResultBag);
+            Assert.IsNotNull(xapienThread.ResultBag.SetpResults);
         }
 
         [TestMethod]

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xapien\Xapien.csproj" />
+    <PackageReference Include="Xapien" Version="1.0.1" />
   </ItemGroup>
 
 </Project>

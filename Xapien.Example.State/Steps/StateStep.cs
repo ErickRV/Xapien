@@ -28,7 +28,7 @@ namespace Xapien.Example.State.Steps
             state = !state;
             await Task.Delay(500);
 
-            return null;
+            return null; //To return null this method MUST BE DECLARED async
         }
     }
 }

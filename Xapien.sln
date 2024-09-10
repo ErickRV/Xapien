@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien.Example.Basic", "Exa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "State", "State", "{EFF78100-1C6B-416B-AF8F-EC50AB381EA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien.Example.State", "Xapien.Example.State\Xapien.Example.State.csproj", "{3ACA0495-7CC0-436E-A941-EF918DF79659}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien.Example.State", "Examples\Xapien.Example.State\Xapien.Example.State.csproj", "{3ACA0495-7CC0-436E-A941-EF918DF79659}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResultBag", "ResultBag", "{7B942F7F-7995-4D65-B380-547C41DFA1EF}"
 EndProject

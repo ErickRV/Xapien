@@ -21,7 +21,8 @@ namespace Xapien.Example.State.Steps
                 if (File.Exists("Output/HolaMundo.txt"))
                     File.Delete("Output/HolaMundo.txt");
             }
-            else {
+            else
+            {
                 await File.WriteAllTextAsync("Output/HolaMundo.txt", "Hola Mundo!");
             }
 

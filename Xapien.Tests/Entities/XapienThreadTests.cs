@@ -17,6 +17,14 @@ namespace Xapien.Tests.Entities
     {
         Faker faker = new Faker();
 
+        class ExceptionStep : IStep
+        {
+            public Task<StepResult> Run(ResultBag bag)
+            {
+                return null;
+            }
+        }
+
         [TestMethod]
         public void CreateXapienThread() {
             //Arrange 
@@ -197,6 +205,21 @@ namespace Xapien.Tests.Entities
 
             //Assert
             Assert.IsTrue(xTask.Status == TaskStatus.Faulted);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public async Task NexStep_ReturnsNull()
+        {
+            //Arrange
+            XapienThread xapienThread = new XapienThread(faker.Random.String2(15));
+            xapienThread.AddStep(new ExceptionStep());
+
+            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationToken token = source.Token;
+
+            //Act
+            await xapienThread.InitThread(token);
         }
     }
 }

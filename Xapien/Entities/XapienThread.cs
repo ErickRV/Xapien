@@ -51,9 +51,16 @@ namespace Xapien.Entities
         public Task InitThread(CancellationToken token) {
             XTask = Task.Run(async () =>
             {
-                while (!token.IsCancellationRequested)
+                try
                 {
-                    await NextStep();
+                    while (!token.IsCancellationRequested)
+                    {
+                        await NextStep();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
             });
 

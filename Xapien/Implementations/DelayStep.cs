@@ -15,7 +15,7 @@ namespace Xapien.Implementations
             this.milliseconds = Milliseconds;
         }
 
-        public async Task<StepResult> Run(ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
             await Task.Delay(milliseconds);
             return null;

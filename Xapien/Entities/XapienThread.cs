@@ -12,7 +12,7 @@ namespace Xapien.Entities
         public Task XTask { get; private set; }
         public string Name { get; private set; }
         public List<IStep> Steps { get; private set; }
-        public ResultBag ResultBag { get; private set; }
+        public MemoryBag MemoryBag { get; private set; }
 
         public int currentStep { get; private set; }
 
@@ -28,8 +28,7 @@ namespace Xapien.Entities
             this.currentStep = 0;
             Steps = new List<IStep>();
 
-            ResultBag = new ResultBag();
-            ResultBag.SetpResults = new Dictionary<string, StepResult>();
+            MemoryBag = new MemoryBag();
         }
 
         //NOTE: List insertion order is guaranteed if no items are moved in the future 
@@ -39,7 +38,7 @@ namespace Xapien.Entities
         }
 
         public Task<StepResult> NextStep() {
-            Task<StepResult> result = Steps[currentStep].Run(ResultBag);
+            Task<StepResult> result = Steps[currentStep].Run(MemoryBag);
             currentStep++;
 
             if (currentStep == Steps.Count)

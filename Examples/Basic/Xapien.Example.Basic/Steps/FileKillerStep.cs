@@ -16,7 +16,7 @@ namespace Xapien.Example.Basic.Steps
             this.filename = filename;
         }
 
-        public async Task<StepResult> Run(ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
             if (File.Exists(filename))
                 File.Delete(filename);

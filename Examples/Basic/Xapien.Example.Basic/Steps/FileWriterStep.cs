@@ -18,7 +18,7 @@ namespace Xapien.Example.Basic.Steps
             this.fileContent = fileContent;
         }
 
-        public async Task<StepResult> Run(ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
             string dir = Path.GetDirectoryName(fileName);
             if (!Directory.Exists(dir))

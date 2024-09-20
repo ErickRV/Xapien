@@ -21,7 +21,7 @@ namespace Xapien.Implementations
             parameters = Parameters;
         }
 
-        public async Task<StepResult> Run(ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
             ProcessStartInfo startinfo = new ProcessStartInfo();
             startinfo.FileName = Path.GetFullPath(exePath);
@@ -36,11 +36,7 @@ namespace Xapien.Implementations
             string output = process.StandardOutput.ReadToEnd();
 
             StepResult result = new StepResult { ExitCode = process.ExitCode, Output = output };
-
-            if (bag.SetpResults.Any(x => x.Key == Name))
-                bag.SetpResults[Name] = result;
-            else
-                bag.SetpResults.Add(Name, result);
+            bag.SetItem(Name, result);
 
             return result;
         }

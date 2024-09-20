@@ -9,6 +9,6 @@ namespace Xapien.Entities
 {
     public interface IStep
     {
-        public Task<StepResult> Run(ResultBag bag);
+        public Task<StepResult> Run(MemoryBag bag);
     }
 }

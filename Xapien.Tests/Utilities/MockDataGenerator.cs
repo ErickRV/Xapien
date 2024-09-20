@@ -15,14 +15,14 @@ namespace Xapien.Tests.Utilities
     {
         public static IStep CreateMockStep() {
             Mock<IStep> mock = new Mock<IStep>();
-            mock.Setup(x => x.Run(It.IsAny<ResultBag>()));
+            mock.Setup(x => x.Run(It.IsAny<MemoryBag>()));
             return mock.Object;
         }
 
         public static IStep CreateMockStep(out Mock<IStep> mocker)
         {
             Mock<IStep> mock = new Mock<IStep>();
-            mock.Setup(x => x.Run(It.IsAny<ResultBag>()));
+            mock.Setup(x => x.Run(It.IsAny<MemoryBag>()));
 
             mocker = mock;
             return mock.Object;
@@ -49,7 +49,7 @@ namespace Xapien.Tests.Utilities
 
     internal class MockStep : IStep
     {
-        public Task<StepResult> Run(ResultBag bag)
+        public Task<StepResult> Run(MemoryBag bag)
         {
             return Task.FromResult(new AutoFaker<StepResult>().Generate());
         }

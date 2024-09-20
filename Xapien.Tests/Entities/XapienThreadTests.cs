@@ -19,7 +19,7 @@ namespace Xapien.Tests.Entities
 
         class ExceptionStep : IStep
         {
-            public Task<StepResult> Run(ResultBag bag)
+            public Task<StepResult> Run(MemoryBag bag)
             {
                 return null;
             }
@@ -37,8 +37,7 @@ namespace Xapien.Tests.Entities
             Assert.AreEqual(name, xapienThread.Name);
             Assert.AreEqual(0, xapienThread.currentStep);
             Assert.IsTrue(xapienThread.Steps.Count() == 0);
-            Assert.IsNotNull(xapienThread.ResultBag);
-            Assert.IsNotNull(xapienThread.ResultBag.SetpResults);
+            Assert.IsNotNull(xapienThread.MemoryBag);
         }
 
         [TestMethod]
@@ -68,7 +67,7 @@ namespace Xapien.Tests.Entities
             StepResult stepResult = MockDataGenerator.CreateMockStepResult();
 
             IStep step0 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker0);
-            mocker0.Setup(r => r.Run(It.IsAny<ResultBag>()))
+            mocker0.Setup(r => r.Run(It.IsAny<MemoryBag>()))
                 .Returns(Task.FromResult(stepResult));
             
             xapienThread.AddStep(step0);
@@ -83,8 +82,8 @@ namespace Xapien.Tests.Entities
             Assert.AreEqual(1, xapienThread.currentStep);
             Assert.IsTrue(TestUtils.AreObjectsEqual(stepResult, result));
 
-            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
-            mocker1.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Never);
+            mocker0.Verify(x => x.Run(It.IsAny<MemoryBag>()), Times.Once);
+            mocker1.Verify(x => x.Run(It.IsAny<MemoryBag>()), Times.Never);
         }
 
         [TestMethod]
@@ -100,10 +99,10 @@ namespace Xapien.Tests.Entities
             IStep step1 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker1);
             xapienThread.AddStep(step1);
 
-            mocker0.Setup(x => x.Run(It.IsAny<ResultBag>()))
+            mocker0.Setup(x => x.Run(It.IsAny<MemoryBag>()))
                 .Returns(Task.FromResult(MockDataGenerator.CreateMockStepResult()));
 
-            mocker1.Setup(x => x.Run(It.IsAny<ResultBag>()))
+            mocker1.Setup(x => x.Run(It.IsAny<MemoryBag>()))
                 .Returns(Task.FromResult(step1Result));
 
             //Act
@@ -114,8 +113,8 @@ namespace Xapien.Tests.Entities
             Assert.AreEqual(0, xapienThread.currentStep);
             Assert.IsTrue(TestUtils.AreObjectsEqual(step1Result, result));
 
-            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
-            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
+            mocker0.Verify(x => x.Run(It.IsAny<MemoryBag>()), Times.Once);
+            mocker0.Verify(x => x.Run(It.IsAny<MemoryBag>()), Times.Once);
         }
 
         [TestMethod]
@@ -136,8 +135,8 @@ namespace Xapien.Tests.Entities
 
             //Assert
             Assert.AreEqual(1, xapienThread.currentStep);
-            mocker0.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Exactly(2));
-            mocker1.Verify(x => x.Run(It.IsAny<ResultBag>()), Times.Once);
+            mocker0.Verify(x => x.Run(It.IsAny<MemoryBag>()), Times.Exactly(2));
+            mocker1.Verify(x => x.Run(It.IsAny<MemoryBag>()), Times.Once);
         }
 
         [TestMethod]
@@ -156,7 +155,7 @@ namespace Xapien.Tests.Entities
             xapienThread.AddStep(step);
             xapienThread.AddStep(step);
 
-            mocker.Setup(r => r.Run(It.IsAny<ResultBag>()))
+            mocker.Setup(r => r.Run(It.IsAny<MemoryBag>()))
                 .Returns(Task.Run(async () => 
                 {
                     await Task.Delay(10);
@@ -177,7 +176,7 @@ namespace Xapien.Tests.Entities
 
             //Assert
             Assert.IsTrue(mainThreadCounter > 0);
-            mocker.Verify(r => r.Run(It.IsAny<ResultBag>()), Times.Exactly(stepsToRun));
+            mocker.Verify(r => r.Run(It.IsAny<MemoryBag>()), Times.Exactly(stepsToRun));
 
         }
 
@@ -188,7 +187,7 @@ namespace Xapien.Tests.Entities
             XapienThread xapienThread = new XapienThread(faker.Random.String2(8));
 
             IStep step0 = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
-            mocker.Setup(m => m.Run(It.IsAny<ResultBag>()))
+            mocker.Setup(m => m.Run(It.IsAny<MemoryBag>()))
                 .Throws(new Exception());
 
             xapienThread.AddStep(step0);

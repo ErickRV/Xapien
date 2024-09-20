@@ -64,7 +64,7 @@ namespace Xapien.Tests.Core
             int runCounter = 0;
 
             IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
-            mocker.Setup(m => m.Run(It.IsAny<ResultBag>()))
+            mocker.Setup(m => m.Run(It.IsAny<MemoryBag>()))
                 .Returns(Task.Run(async () => {
                     await Task.Delay(50);
                     return MockDataGenerator.CreateMockStepResult();
@@ -100,7 +100,7 @@ namespace Xapien.Tests.Core
             //Arrange 
             int runCounter = 0;
             IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
-            mocker.Setup(m => m.Run(It.IsAny<ResultBag>()))
+            mocker.Setup(m => m.Run(It.IsAny<MemoryBag>()))
                 .Returns(Task.Run(async () => {
                     await Task.Delay(50);
                     return MockDataGenerator.CreateMockStepResult();
@@ -145,7 +145,7 @@ namespace Xapien.Tests.Core
 
             IStep step = MockDataGenerator.CreateMockStep(out Mock<IStep> mocker);
 
-            mocker.Setup(x => x.Run(It.IsAny<ResultBag>()))
+            mocker.Setup(x => x.Run(It.IsAny<MemoryBag>()))
                 .Throws(new Exception());
 
             List<XapienThread> threads = new List<XapienThread>()

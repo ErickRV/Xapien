@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien.Example.State", "Exa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResultBag", "ResultBag", "{7B942F7F-7995-4D65-B380-547C41DFA1EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xapien.Example.ResultBag", "Examples\Xapien.Example.ResultBag\Xapien.Example.ResultBag.csproj", "{94D667EA-CC1B-4007-8BC8-7C54D6C597AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xapien.Example.ResultBag", "Examples\Xapien.Example.ResultBag\Xapien.Example.ResultBag.csproj", "{94D667EA-CC1B-4007-8BC8-7C54D6C597AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{32536FCB-A503-4CC3-A47A-B37ED713495F}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

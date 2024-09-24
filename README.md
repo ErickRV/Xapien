@@ -8,7 +8,7 @@ With Xapien developers can easily create an infinite loop with multiple threads 
 <br/><br/>
 ## Quick Start
 
-#### Install nuguet package
+#### Install nuget package
 ```
 PM> NuGet\Install-Package Xapien
 ```

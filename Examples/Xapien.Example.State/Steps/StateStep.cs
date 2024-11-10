@@ -11,7 +11,7 @@ namespace Xapien.Example.State.Steps
     {
         private bool state = false;
 
-        public async Task<StepResult> Run(ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
             if (!Directory.Exists("Output"))
                 Directory.CreateDirectory("Output");

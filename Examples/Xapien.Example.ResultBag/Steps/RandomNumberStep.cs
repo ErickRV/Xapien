@@ -9,14 +9,14 @@ namespace Xapien.Example.ResultBag.Steps
 {
     public class RandomNumberStep : IStep
     {
-        public async Task<StepResult> Run(Entities.ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
             int random = new Random().Next();
-            if (bag.SetpResults.ContainsKey("random")){
-                bag.SetpResults["random"] = new StepResult { Output = random };
+            if (bag.ItemExists("random")){
+                bag.SetItem("random", new StepResult { Output = random });
             }
             else {
-                bag.SetpResults.Add("random", new StepResult { Output = random });
+                bag.SetItem("random", new StepResult { Output = random });
             }
 
             return null; //To return null this method MUST BE DECLARED async

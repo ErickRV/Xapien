@@ -9,9 +9,9 @@ namespace Xapien.Example.ResultBag.Steps
 {
     public class PrintStep : IStep
     {
-        public async Task<StepResult> Run(Entities.ResultBag bag)
+        public async Task<StepResult> Run(MemoryBag bag)
         {
-            StepResult previousResult = bag.SetpResults["random"];
+            StepResult previousResult = (StepResult)bag.GetItem("random");
             Console.WriteLine($"Previous Step generated random number: {(int)previousResult.Output}");
 
             await Task.Delay(500);

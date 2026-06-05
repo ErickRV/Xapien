@@ -5,17 +5,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>$(AssemblyName)</PackageId>
-    <Title>Xipe.Xapien</Title>
-    <Authors>ZeLTicK09</Authors>
-    <Company>Xipe Group </Company>
+    <PackageId>Xapien.Task</PackageId>
+    <Title>Xapien.Task</Title>
+    <Authors>Z3LT1K09</Authors>
+    <Company>Neem Technology</Company>
     <Description>Xapien is a data processing framework that aims to simplify the initial setup of a data processing application and allow developers to simply focus on the processing logic</Description>
     <PackageProjectUrl>https://github.com/ErickRV/Xapien</PackageProjectUrl>
     <PackageOutputPath>bin\Publish</PackageOutputPath>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
-    <Version>1.0.4</Version>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

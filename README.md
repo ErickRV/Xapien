@@ -10,7 +10,7 @@ With Xapien developers can easily create an infinite loop with multiple threads 
 
 #### Install nuget package
 ```
-PM> NuGet\Install-Package Xapien
+PM> NuGet\Install-Package Xapien.Task
 ```
 
 #### Write an IStep implementation

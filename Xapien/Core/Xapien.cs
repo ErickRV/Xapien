@@ -29,25 +29,19 @@ namespace Xapien.Core
             if (CancellationTokenSource == default)
                 CancellationTokenSource = new CancellationTokenSource();
 
-            MainThread = Task.Run(() => 
+            MainThread = Task.Run(async () => 
             {
                 try
                 {
                     CancellationToken token = CancellationTokenSource.Token;
+                    List<Task> tasks = new List<Task>();
                     foreach (XapienThread xapienThread in threads)
                     {
-                        xapienThread.InitThread(token);
+                        Task task = xapienThread.InitThread(token);
+                        tasks.Add(task);
                     }
 
-                    while (!token.IsCancellationRequested)
-                    {
-                        //TODO: How do we want Xapien to behave when any thread is faulted???
-                        //For the moment it will cancel all other tasks and die...
-                        if (threads.Select(t => t.XTask).Any(x => x.Status == TaskStatus.Faulted))
-                        {
-                            CancellationTokenSource.Cancel();
-                        }
-                    }
+                    await Task.WhenAll(tasks);
                 }
                 catch (Exception)
                 {

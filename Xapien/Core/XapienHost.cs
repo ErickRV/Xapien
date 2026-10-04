@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Xapien.Core
 {
-    public class XapienHost : IHostedService
+    public class XapienHost : BackgroundService
     {
         private Task? _xapienTask;
         private CancellationTokenSource? _stoppingCts;
@@ -18,45 +18,22 @@ namespace Xapien.Core
             this.xapien = xapien;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // Create linked token to allow cancelling executing task from provided token
-            _stoppingCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
-            xapien.SetCancellationTokenSource(_stoppingCts);
-
-            _xapienTask = xapien.Run();
-
-            // If the task is completed then return it, this will bubble cancellation and failure to the caller
-            if (_xapienTask.IsCompleted)
-            {
-                return _xapienTask;
-            }
-
-            // Otherwise it's running
-            return Task.CompletedTask;
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            // Stop called without start
-            if (_xapienTask == null)
-            {
-                return;
-            }
-
             try
             {
-                // Signal cancellation to the executing method
-                _stoppingCts!.Cancel();
+                // Create linked token to allow cancelling executing task from provided token
+                _stoppingCts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+
+                xapien.SetCancellationTokenSource(_stoppingCts);
+
+                _xapienTask = xapien.Run();
+
+                await _xapienTask;
             }
-            finally
+            catch (Exception)
             {
-                // Wait until the task completes or the stop token triggers
-                var tcs = new TaskCompletionSource<object>();
-                using CancellationTokenRegistration registration = cancellationToken.Register(s => ((TaskCompletionSource<object>)s!).SetCanceled(), tcs);
-                // Do not await the _executeTask because cancelling it will throw an OperationCanceledException which we are explicitly ignoring
-                await Task.WhenAny(_xapienTask, tcs.Task).ConfigureAwait(false);
+                throw;
             }
         }
     }

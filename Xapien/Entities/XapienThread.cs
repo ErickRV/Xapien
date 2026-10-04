@@ -37,14 +37,21 @@ namespace Xapien.Entities
             this.Steps.Add(step);
         }
 
-        public Task<StepResult> NextStep() {
-            Task<StepResult> result = Steps[currentStep].Run(MemoryBag);
-            currentStep++;
+        public async Task<StepResult> NextStep() {
+            try
+            {
+                StepResult result = await Steps[currentStep].Run(MemoryBag);
+                currentStep++;
 
-            if (currentStep == Steps.Count)
-                currentStep = 0;
+                if (currentStep == Steps.Count)
+                    currentStep = 0;
 
-            return result;
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public Task InitThread(CancellationToken token) {

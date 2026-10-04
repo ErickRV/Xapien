@@ -14,9 +14,9 @@ namespace Xapien.Example.Basic
             DelayStep delay = new DelayStep(500);
 
             builder.AddXThread("X Thread", new List<IStep> {
-                new FileWriterStep("Output\\XThread\\Hello.txt", "Hello"),
+                new FileWriterStep($"Output\\XThread\\Hello.txt", "Hello"),
                 delay,
-                new FileWriterStep("Output\\XThread\\World.txt", "World"),
+                new FileWriterStep($"Output\\XThread\\World.txt", "World"),
                 delay,
                 new FileKillerStep("Output\\XThread\\Hello.txt"),
                 delay,

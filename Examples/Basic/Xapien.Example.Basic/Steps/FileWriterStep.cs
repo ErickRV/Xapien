@@ -24,7 +24,7 @@ namespace Xapien.Example.Basic.Steps
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
 
-            await File.WriteAllTextAsync(fileName, fileContent);
+            await File.WriteAllTextAsync(fileName+Guid.NewGuid().ToString(), fileContent);
             return new StepResult { ExitCode = 1, Output = null};
             
         }
